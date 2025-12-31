@@ -1,0 +1,187 @@
+<div nz-row>
+<div nz-col nzSpan="7">
+    <div style="border-radius: 8px; background-color: #202020; height: calc(100vh - 64px) ; margin-top: 12px; padding: 12px;">
+    <nz-layout style="background-color: transparent; margin-bottom: 25px">
+      <nz-content>
+          <nz-spin [nzSpinning]="loading" style="border: 0px;" nzTip="Loading...">
+                <div nz-row #scrollDiv  class="content-box"  style="border-radius: 9px;background-color: transparent;overflow-y: auto;height: calc(100vh - 310px);">
+                  <nz-table #basicTable [nzData]="dataLing"
+                    [nzShowPagination]="false"
+                    [nzBordered]="'false'"
+                    [nzNoResult]="customTpl"
+                    bgcolor="transparent"
+                    class="force-break" 
+                    style="width: 100%; "
+                    >
+
+                    <tbody>
+                      <tr *ngFor="let data of dataSet">
+                        <td style="width: 400px;">
+                          <div *ngIf="data.role=='user' " class="force-break" style="float: right; border-radius: 4px; max-width: 100%; padding: 5px 10px 10px 10px;color: white; background-color: #1777ff;" [innerHTML]="data.content|markdown"></div>
+                          <div *ngIf="data.role=='assistant'" class="force-break"  style=" box-shadow:0 0 3px #d1d2da;max-width: 100%; border-radius: 4px; padding: 10px 10px 10px 10px;color:#4b4b4b; background-color: #f9f9fe;  overflow-y: auto;" >
+                            <div>
+                            <div *ngIf="data.type=='markdown'" [innerHTML]="data.content|markdown">
+                            </div>
+                             <div *ngIf="data.type=='json' || data.type==''"  [innerHTML]="getFormattedContent(data.content)">
+                             
+                            </div>
+                            <div *ngIf="data.subMessage!=null && data.subMessage.length>0">
+                              <ul style="width: 100%;">
+                                <li *ngFor="let subdata of data.subMessage" nz-row >
+                                   <div nz-col nzSpan="1">
+                                    <i style="margin-right: 10px;" *ngIf="subdata.type==0"  nz-icon>
+                                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <circle cx="12" cy="12" r="9" stroke="#008b8b" stroke-width="2"/>
+                                          <path d="M12 3C12 3 12 6 12 12" stroke="#008b8b" stroke-width="2" stroke-linecap="round"/>
+                                      </svg>
+                                    </i>                                
+                                    <i style="margin-right: 10px;"  *ngIf="subdata.type==1" [style.color]="'#008b8b'" nz-icon nzType="loading" nzTheme="outline"></i>
+                                    <i style="margin-right: 10px;"  *ngIf="subdata.type==2"   nz-icon >
+                                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="9"   stroke="#008b8b" stroke-width="2"/>
+                                        <path d="M8 12L11 15L16 9" stroke="#008b8b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    </i>
+                                  </div>
+                                   <div style="padding-left: 15px;" nz-col nzSpan="23" [innerHTML]="getFormattedContent(subdata.content)"></div>
+                                </li>
+                              </ul>
+                            </div>
+                            </div>
+                            <div style="padding: 10px; margin:0 -8px -5px -8px ; border-top: 1px solid #d1d2da; background-color: #e7e7e8;" *ngIf="data.cmd!='' && data.cmd!=undefined">
+                              <button nz-button nzType="primary" (click)="sureHandler()" >确认需求</button>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                     
+                    </tbody>
+                  </nz-table>
+                  <ng-template #customTpl>
+                    <!-- 完全空的内容 -->
+                  </ng-template>
+              </div>
+          </nz-spin>
+       </nz-content>
+      <nz-footer style="background-color: transparent;margin: 10px 0 0 0;padding:0px !important;">
+        <div  style="border-radius: 8px;">
+      
+         
+          <nz-input-group nzSearch  style="background-color: transparent;"  nzSize="large" >
+            <textarea  rows="5"   style="height: 155px; border-radius: 8px; resize: none;" (resize)="false" [(ngModel)]="chatMsg" (keyup.enter)="sendHandler()" nz-input placeholder="请输入聊天内容" ></textarea>
+          </nz-input-group>
+          
+          <div nz-row  [nzGutter]="4" style="height: 50px; border-radius: 5px; background-color: #636363; margin: 10px 0px 10px 0px">
+            <div nz-col  [nzSpan]="14">
+               <i nz-icon nzType="cloud-upload" 
+               style="margin: 20px 10px; color: white;"
+               nzTheme="outline"></i>
+              <span style="color: white;">
+                选择有bug的文件
+              </span>
+            </div>
+            
+          <div nz-col [nzSpan]="10" style="margin-top:5px;">
+             <div nz-row  [nzGutter]="8"  >
+              <div nz-col>
+                  <button nz-button nzType="primary" style="width: 70px;" nzSearch [disabled]="loading"  nzSize="large" (click)="sendHandler()">发送</button>
+              </div>
+              <div nz-col>
+                  <button nz-button nzType="primary" nzSearch [disabled]="loading"  nzSize="large" (click)="createNewProjectHandler()">停止项目</button>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      </nz-footer>
+  </nz-layout>
+    </div>
+</div>
+    <div nz-col nzSpan="17" style="height: calc(100vh - 64px)">
+        <div nz-row style="border-radius: 8px 8px 0 0; background-color: #202020;  padding: 2px; margin:12px 12px 0 12px;">
+            <nz-tabset nzSize="large"  [nzTabBarExtraContent]="extraTemplate">
+            <nz-tab nzTitle="</>">
+              <div nz-row>
+                <div nz-col [nzSpan]="5" >
+                  <div nz-row style="padding: 5px 10px 10px 10px;">              
+                    <nz-input-group [nzSize]="'small'" nzSearch [nzAddOnAfter]="suffixIconButton">
+                        <input type="text" [nzAutocomplete]="auto"  #input [(ngModel)]="keyword" style="background: transparent;color: white;" nz-input placeholder="input search text" />
+                    </nz-input-group>
+                    <ng-template #suffixIconButton>
+                      <button nz-button nzType="primary" (click)="searchFilehandler()"  [nzSize]="'small'" nzSearch><i nz-icon nzType="search"></i></button>
+                    </ng-template>
+                    <nz-autocomplete #auto style="width: 225px;">
+                      <nz-auto-option class="global-search-item" *ngFor="let option of options" [nzValue]="option.category">
+                        <div (click)="showcontentHandler(option)">{{option.script_path}}</div>
+                      </nz-auto-option>
+                    </nz-autocomplete>
+                  </div>
+                  <div nz-row style="overflow:hidden;   width: 215px;"  class="content-box">
+                    
+                    <nz-tree
+                        nzBlockNode
+                        (nzClick)="menuclick($event)" 
+                        style="color: white;width: 400px;" 
+                        [nzData]="nodes"
+                        [nzVirtualHeight]="treeheight"
+                        [nzTreeTemplate]="nzTreeTemplate"
+                      ></nz-tree>
+                      <ng-template #nzTreeTemplate let-node let-origin="origin">
+                        <span class="custom-node">
+                          <span *ngIf="origin.children!=null" (contextmenu)="contextMenu($event, menu)">
+                            <i nz-icon [nzType]="node.isExpanded ? 'folder-open' : 'folder'" (click)="openFolder(node)"></i>
+                            <span class="folder-name">{{ origin.name }}</span>
+                          </span>
+                          <span style="white-space:nowrap" *ngIf="origin.children==null" (contextmenu)="contextMenu($event, menu)">
+                            <i nz-icon nzType="file"></i>
+                            <span class="file-name">{{ origin.name }}</span>
+                         
+                          </span>
+                        </span>
+                      </ng-template>
+                    
+                  </div>
+                  
+                </div>
+                <div nz-col [nzSpan]="19"  [ngStyle]="editStyle" style="overflow: hidden;" class="content-box">
+                  <div style="height: 40px;">
+                    <nz-list [nzItemLayout]="'horizontal'" style="width:100%;height: 26px;border-bottom: 1px solid #6b6b6b;" [nzLoading]="loading">
+                      <nz-list-item (click)="itemclickHandler(item)" [nzNoFlex]="true" *ngFor="let item of files" style="color: white; padding: 0 10px 0 0px; float: left;">
+                          <span *ngIf="item.selected==true" style=" background-color: #d1d2da;padding: 5px 5px 0px 5px;color: #4b4b4b; " >{{item.name}} <i nz-icon nzType="close-circle" (click)="deleteItemHandler(item)" nzTheme="outline"></i></span>
+                          <span *ngIf="item.selected==false" style=" padding:5px 5px 0px 5px;" >{{item.name}} <i nz-icon (click)="deleteItemHandler(item)" nzType="close-circle" nzTheme="outline"></i></span>
+                      </nz-list-item>
+                  </nz-list>
+                  </div>
+                  <ngx-monaco-editor
+                    [options]="editorOptions"
+                    style="height: 100%; width: 50vw"
+                    [(ngModel)]="scriptContent"
+                  >
+                </ngx-monaco-editor>
+                </div>
+              </div>
+              
+            </nz-tab>
+            <nz-tab nzTitle="preview">
+              Content of Tab Pane 2
+            </nz-tab>
+
+          </nz-tabset>
+          <ng-template #extraTemplate>
+            <nz-button-group style="margin-right: 20px;  margin-top: 15px;">
+               <button nz-button nzType="primary" (click)="saveCodeInfohandler()" ><i nz-icon nzType="save" nzTheme="outline"></i>保存代码</button>
+               <button nz-button nzType="primary" (click)="deleteCodeInfohandler()" ><i nz-icon nzType="delete" nzTheme="outline"></i>删除容器</button>
+               <button nz-button nzType="primary" (click)="deploymentCode()">运行容器<i nz-icon nzType="caret-right" nzTheme="outline"></i></button>
+               <button nz-button  (click)="downloadCode()">下载代码</button>
+          </nz-button-group>
+           
+          </ng-template>
+        </div>
+        <div   nz-row [ngStyle]="pannelStyle">
+            <app-pannel style="width: 100%;"></app-pannel>
+        </div>
+    </div>
+    
+</div>

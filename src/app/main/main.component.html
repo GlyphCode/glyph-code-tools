@@ -1,0 +1,67 @@
+<nz-layout class="app-layout">
+
+   <nz-header style="height: 40px; display: block;">
+      <div class="app-header">
+         <nz-avatar  nzIcon="user" [nzSize]="'small'" style="float: right;background-color:#87d068; margin: 5px 10px 0 10px; padding: 0; width: 25px; height: 25px;"></nz-avatar>
+        <span style="float: right; color:white; margin: -15px 10px 0 10px;" nz-popover [nzPopoverContent]="contentTemplate"  nzPopoverPlacement="bottomRight" >{{userName}}</span>
+           <ng-template #contentTemplate>
+              <div class="ant-popover-inner-content">
+                 <p><button class="menubtn" nz-button nzType="link">用户信息</button></p>
+                <p><button class="menubtn" nz-button nzType="link">修改密码</button></p>
+                <p><button class="menubtn" nz-button nzType="link" (click)="exitSystemHandler()">退出登录</button></p>
+              </div>
+           </ng-template>
+      </div>
+    </nz-header>
+  <nz-layout style="background-color: #545454;">
+     <nz-sider class="menu-sidebar"
+            nzCollapsible
+            nzWidth="80px"
+            style="margin: 12px; border-radius: 8px;"
+            nzBreakpoint="md"
+            [(nzCollapsed)]="isCollapsed"
+            [nzTrigger]="null">
+     <ul nz-menu nzMode="inline" nzTheme="dark">
+        <li
+          nz-menu-item
+          nz-tooltip
+          nzTooltipPlacement="right"
+          nzSelected
+          (click)="createNewProjectHandler()"
+          >
+          <i nz-icon nzType="project" style="display: block;margin-top: 15px;"></i>
+          <span style="display: block; height: 20px;margin-top: -20px; margin-left: -12px;">新建项目</span>
+        </li>
+        <li  nz-menu-item
+          nz-tooltip
+          nzTooltipPlacement="right"   
+          >
+          <a href="#" routerLink="/main/projects/list">
+            <i nz-icon nzType="history" style="display: block;margin-top: 15px;"></i>
+            <span style="display: block; height: 20px;margin-top: -20px; margin-left: -12px;">历史记录</span>
+          </a>
+        </li>
+        <li  nz-menu-item>
+         <i nz-icon nzType="setting" style="display: block;margin-top: 15px;"></i>
+         <span style="display: block; height: 20px;margin-top: -20px;">设置</span>
+        </li>
+      </ul>
+    
+  </nz-sider>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>
+ 
+<nz-modal
+    [(nzVisible)]="isVisible"
+    nzTitle="Modal Title"
+    (nzOnCancel)="handleCancel()"
+    [nzFooter]="null"
+    [nzWidth]="600"
+    >
+    <app:app-project-create></app:app-project-create>
+</nz-modal>

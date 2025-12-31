@@ -1,0 +1,45 @@
+ .demo-infinite-container {
+    
+        border: 0px solid #e8e8e8;
+        border-radius: 4px;
+        overflow-x: hidden;
+      }
+
+::ng-deep .ant-list-item
+ {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+
+/* Mac风格窄滚动条样式 */
+.content-box::-webkit-scrollbar {
+width: 8px;
+}
+
+.content-box::-webkit-scrollbar-track {
+background: transparent;
+border-radius: 4px;
+}
+
+.content-box::-webkit-scrollbar-thumb {
+background: rgba(193, 193, 193, 1) ;
+border-radius: 4px;
+}
+
+.content-box::-webkit-scrollbar-thumb:hover {
+background: rgba(193, 193, 193, 1) ;
+}
+
+.content-box::-webkit-scrollbar-thumb:active {
+background: rgba(193, 193, 193, 1) ;
+}
+
+/* 兼容Firefox的滚动条样式 */
+.content-box {
+scrollbar-width: thin;
+scrollbar-color: rgba(193, 193, 193, 1) transparent;
+}

@@ -1,0 +1,43 @@
+ <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+      <nz-form-item class="ant-form-item">
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="project">project</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="project name is required">
+          <input nz-input formControlName="project" id="project" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="git_url" nzRequired>git url</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your git url !">
+          <input nz-input type="text" id="git_url" formControlName="git_url"/>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="ant-form-item">
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="image_url" nzRequired>branch</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
+          <input nz-input type="text" formControlName="image_url" id="image_url" />
+          <ng-template #errorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Please fill in  branch name!
+            </ng-container>
+            
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="ant-form-item">
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="language" nzRequired>开发语言</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
+          <input nz-input type="text" formControlName="language" id="language" />
+          <ng-template #errorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Please fill in  image name!
+            </ng-container>
+            
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item nz-row class="ant-form-item">
+        <nz-form-control [nzSpan]="14" [nzOffset]="6">
+          <button nz-button nzType="primary">Register</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>

@@ -1,0 +1,25 @@
+llm:
+  defaultllm: qwen3-max
+  token: 
+  url: 
+git:
+  token: 
+project:
+  basedir: /home/code/
+log:
+  level: 5
+elastic:
+  esurl: http://elasticsearch:9200
+  esbulksize: 5000
+redis:
+  host:
+  port: 6379
+  password: 
+database:
+  dialect: mysql
+  host: mysql
+  port: 3306
+  dbname: you_agent
+  username: root
+  password: "!QAZ2wsx"
+

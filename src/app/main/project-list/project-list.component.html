@@ -1,0 +1,126 @@
+<div nz-row>
+<div nz-col nzSpan="7">
+    <div style="border-radius: 8px; background-color: #202020; height: calc(100vh - 64px) ; margin-top: 12px; padding: 12px;">
+    <nz-layout style="background-color: transparent; margin-bottom: 25px">
+      <nz-content>
+          <nz-spin [nzSpinning]="loading" style="border: 0px;" nzTip="Loading...">
+                <div nz-row #scrollDiv  class="content-box"  style="border-radius: 9px;background-color: transparent;overflow-y: hidden; height: calc(100vh - 90px) !important;">
+                  <nz-table #basicTable  
+                    [nzShowPagination]="false"
+                    [nzBordered]="'false'"
+                    [nzNoResult]="customTpl"
+                    bgcolor="transparent"
+                    class="force-break" 
+                    [nzScroll]="{ x: '400px', y: '850px' }"
+                    style="width: 100%; overflow: hidden;"
+                    >
+                   <thead>
+                        <tr>
+                            <th nzWidth="40%" style="height: 50px; padding-left: 10px;  ">项目名称</th>
+                            <th nzWidth="25%" style="height: 50px;">创建时间</th>
+                            <th style="height: 50px;">操作</th>
+                        </tr>
+                   </thead>
+                    <tbody>
+                       <ng-template ngFor let-data [ngForOf]="dataSet">
+                        <tr>
+                          <td>
+                            <span>{{data.project_name}}</span>
+                          </td>
+                          <td>
+                            <span>{{data.create_time| date:'yyyy-MM-dd'}}</span>
+                          </td>
+                          <td>
+                            <span (click)="activeCodehandler(data)" style="cursor:pointer;">激活</span>
+                            <span style="padding-left:10px ;cursor:pointer;" (click)="showCodehandler(data)">代码</span>
+                            <span (nzOnConfirm)="deleteCodehandler(data)" nz-popconfirm  nzPopconfirmPlacement="topLeft" nzPopconfirmTitle="您确定要删除吗?" style="padding-left:10px ;cursor:pointer;">删除</span>
+                          </td>
+                        </tr>
+                        <tr [nzExpand]="'false'" bgColor="#636363" style="background-color: #636363 !important;">
+                            <td colspan="3" style="color: black;">git:{{data.git_url}} &nbsp;&nbsp; 状态：{{data.actived | status}}</td>
+                        </tr>
+                     </ng-template>
+                    </tbody>
+                  </nz-table>
+                  <ng-template #customTpl>
+                    <!-- 完全空的内容 -->
+                  </ng-template>
+              </div>
+          </nz-spin>
+       </nz-content>
+  </nz-layout>
+    </div>
+</div>
+    <div nz-col nzSpan="17">
+        <div style="border-radius: 8px; background-color: #202020; height: calc(100vh - 64px) ; padding: 2px; margin:12px 12px 0 12px;">
+            <nz-tabset nzSize="large"  [nzTabBarExtraContent]="extraTemplate">
+            <nz-tab nzTitle="</>">
+              <div nz-row style="height: calc(100vh - 160px);">
+                <div nz-col [nzSpan]="5" >
+                  <div nz-row style="padding: 5px 10px 10px 10px;">              
+                    <nz-input-group [nzSize]="'small'" nzSearch [nzAddOnAfter]="suffixIconButton">
+                        <input type="text" [nzAutocomplete]="auto"  #input [(ngModel)]="keyword" style="background: transparent;color: white;" nz-input placeholder="input search text" />
+                    </nz-input-group>
+                    <ng-template #suffixIconButton>
+                      <button nz-button nzType="primary" (click)="searchFilehandler()"  [nzSize]="'small'" nzSearch><i nz-icon nzType="search"></i></button>
+                    </ng-template>
+                    <nz-autocomplete #auto style="width: 225px;">
+                      <nz-auto-option class="global-search-item" *ngFor="let option of options" [nzValue]="option.category">
+                        <div (click)="showcontentHandler(option)">{{option.script_path}}</div>
+                      </nz-auto-option>
+                    </nz-autocomplete>
+                  </div>
+                  <div nz-row style="overflow:hidden;   width: 215px;"  class="content-box">
+                    
+                    <nz-tree
+                        nzBlockNode
+                        (nzClick)="menuclick($event)" 
+                        style="color: white;width: 400px;" 
+                        [nzData]="nodes"
+                        nzVirtualHeight="790px"
+                        [nzTreeTemplate]="nzTreeTemplate"
+                      ></nz-tree>
+                      <ng-template #nzTreeTemplate let-node let-origin="origin">
+                        <span class="custom-node">
+                          <span *ngIf="origin.children!=null" (contextmenu)="contextMenu($event, menu)">
+                            <i nz-icon [nzType]="node.isExpanded ? 'folder-open' : 'folder'" (click)="openFolder(node)"></i>
+                            <span class="folder-name">{{ origin.name }}</span>
+                          </span>
+                          <span style="white-space:nowrap" *ngIf="origin.children==null" (contextmenu)="contextMenu($event, menu)">
+                            <i nz-icon nzType="file"></i>
+                            <span class="file-name">{{ origin.name }}</span>
+                         
+                          </span>
+                        </span>
+                      </ng-template>
+                    
+                  </div>
+                  
+                </div>
+                <div nz-col [nzSpan]="19" style="height: 100%;" class="content-box">
+                  <div style="height: 40px;">
+                    <nz-list [nzItemLayout]="'horizontal'" style="width:100%;height: 26px;border-bottom: 1px solid #6b6b6b;">
+                      <nz-list-item (click)="itemclickHandler(item)" [nzNoFlex]="true" *ngFor="let item of files" style="color: white; padding: 0 10px 0 0px; float: left;">
+                          <span *ngIf="item.selected==true" style=" background-color: #d1d2da;padding: 5px;color: #4b4b4b; " >{{item.name}} <i nz-icon nzType="close-circle" (click)="deleteItemHandler(item)" nzTheme="outline"></i></span>
+                          <span *ngIf="item.selected==false" style=" padding: 5px;" >{{item.name}} <i nz-icon (click)="deleteItemHandler(item)" nzType="close-circle" nzTheme="outline"></i></span>
+                      </nz-list-item>
+                  </nz-list>
+                  </div>
+                  <ngx-monaco-editor
+                    class="content-box"
+                    [options]="editorOptions"
+                    style="height: 100%; display: block;"
+                    [(ngModel)]="scriptContent"
+                  >
+              </ngx-monaco-editor></div>
+              </div>
+              
+            </nz-tab>
+           
+          </nz-tabset>
+          <ng-template #extraTemplate>
+            
+          </ng-template>
+        </div>
+    </div>
+</div>

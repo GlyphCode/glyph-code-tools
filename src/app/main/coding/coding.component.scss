@@ -1,0 +1,144 @@
+.bodybg{
+      background-color: #636363;
+}
+.content{
+  margin-top: 20px;
+  padding: 0 10px 10px 10px;
+  border-bottom: 0px;
+}
+.content1{
+  margin-top: 0px;
+  padding: 0 10px 0px 10px;
+}
+
+// .ant-table-tbody>tr>td {
+//   border-bottom: 0px solid #e8e8e8 !important;
+//   -webkit-transition: all .3s, border 0s;
+//   transition: all .3s, border 0s
+// }
+
+
+::ng-deep .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+  background: transparent !important;
+  border-bottom: transparent 0px solid !important;
+}
+
+ ::ng-deep .ant-table-tbody > tr > td {
+    border-bottom: 0px solid #f0f0f0;
+    transition: background 0.3s;
+}
+
+::ng-deep .ant-table {
+  background: #636363 !important;
+  border-radius: 9px;
+  color: white;
+  min-height: calc(100vh - 310px);
+}
+
+::ng-deep .ant-input-group-addon{
+background-color: transparent;
+}
+
+/* Mac风格窄滚动条样式 */
+.content-box::-webkit-scrollbar {
+width: 8px;
+}
+
+.content-box::-webkit-scrollbar-track {
+background: transparent;
+border-radius: 4px;
+}
+
+.content-box::-webkit-scrollbar-thumb {
+background: rgba(193, 193, 193, 1) ;
+border-radius: 4px;
+}
+
+.content-box::-webkit-scrollbar-thumb:hover {
+background: rgba(193, 193, 193, 1) ;
+}
+
+.content-box::-webkit-scrollbar-thumb:active {
+background: rgba(193, 193, 193, 1) ;
+}
+
+/* 兼容Firefox的滚动条样式 */
+.content-box {
+scrollbar-width: thin;
+scrollbar-color: rgba(193, 193, 193, 1) transparent;
+}
+
+
+::ng-deep .ant-tabs-top > .ant-tabs-nav::before, .ant-tabs-bottom > .ant-tabs-nav::before, .ant-tabs-top > div > .ant-tabs-nav::before, .ant-tabs-bottom > div > .ant-tabs-nav::before {
+    position: absolute;
+    right: 0;
+    left: 0;
+    padding: 20px 10px 20px 10px;
+    border-bottom: 1px solid #6b6b6b;
+    content: '';
+}
+::ng-deep .ant-tabs-top {
+  color: white;
+}
+
+::ng-deep .ant-tabs-tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin: 10px 22px 0 20px;
+    padding: 12px 0;
+    background: transparent;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+}
+
+
+.force-break {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  width: 390px;
+}
+
+
+  nz-tree {
+        overflow: hidden;
+        margin: 0 -24px;
+        padding: 0 24px;
+      }
+
+      .custom-node {
+        cursor: pointer;
+        line-height: 24px;
+        margin-left: 4px;
+        display: inline-block;
+      }
+
+      .file-name,
+      .folder-name {
+        margin-left: 4px;
+      }
+
+      .file-desc,
+      .folder-desc {
+        padding: 0 8px;
+        display: inline-block;
+        background: #87ceff;
+        color: #ffffff;
+        position: relative;
+        left: 12px;
+      }
+
+ul li{
+  list-style-type: none;
+  margin: 0px;
+}
+ul{
+  margin: 0px;
+  padding: 0px 0px 0px 5px;
+}
+::ng-deep .ant-list-split .ant-list-item {
+border: none;
+}

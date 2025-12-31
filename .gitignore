@@ -1,0 +1,5 @@
+*.exe
+access_log.*
+vendor
+es_data
+data

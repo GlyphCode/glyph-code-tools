@@ -1,0 +1,28 @@
+
+{
+
+    "/agent":{
+      "target":"http://localhost:5003",
+      "secure":false,
+      "changeOrigin":true,
+      "pathRewrite":{
+       "^/agent":"/agent"
+      }
+    },
+    "/assets/editor": {
+    "target": "http://localhost:4200",
+    "pathRewrite": {
+      "^/assets/editor": "/assets/editor/editor"
+    },
+    "secure": false,
+    "changeOrigin": true
+  },
+   "/vs": {
+    "target": "http://localhost:4200",
+    "pathRewrite": {
+      "^/vs": "/assets/editor"
+    },
+    "secure": false,
+    "changeOrigin": true
+  }
+  }

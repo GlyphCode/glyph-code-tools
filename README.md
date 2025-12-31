@@ -1,3 +1,5 @@
+## ![](https://file+.vscode-resource.vscode-cdn.net/d%3A/workdir/js-project/glyph-code-tools/screenshot-20251231-182944.png?version%3D1767177528555)
+
 ## AI驱动的需求到代码生成平台
 
 通过对话收集需求 → 智能分解任务 → 自动生成代码的完整开发工作流

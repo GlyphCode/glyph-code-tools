@@ -51,8 +51,11 @@ npm install
 # 3. 启动开发服务器
 npm run start
 
-# 5. 在浏览器中打开
+# 4. 在浏览器中打开
 open http://localhost:4200
+
+#5. 直接使用docker-compose部署完整程序（使用docker-compse.yml）
+docker-compose up -d
 ```
 
 ## 首次使用指南

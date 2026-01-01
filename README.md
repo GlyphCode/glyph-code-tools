@@ -56,6 +56,9 @@ open http://localhost:4200
 
 #5. 直接使用docker-compose部署完整程序（使用docker-compse.yml）
 docker-compose up -d
+
+登录默认用户名：admin/111111
+
 ```
 
 ## 首次使用指南

@@ -3,7 +3,7 @@
 services:
   # Frontend Service
   code:
-    image: agent:v1
+    image: tianyunzhao/agent:v1
     ports:
       - "3000:80"
     environment:

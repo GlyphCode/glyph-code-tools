@@ -3,7 +3,7 @@
 services:
   # Frontend Service
   code:
-    image: tianyunzhao/agent:v1
+    image: tianyunzhao/agent:v2
     ports:
       - "3000:80"
     environment:
@@ -17,9 +17,11 @@ services:
       - DOCKER_TLS_CERTDIR=
       - DOCKER_MACHINE_NAME=
       #大模型token
-      - LLMTOKEN= 
+      - LLMTOKEN=
       #大模型api接口地址
       - LLMURL=
+       #默认大模型
+      - LLMMODEL=
     extra_hosts:
       # 确保能解析到主机
       - "host.docker.internal:host-gateway"
@@ -35,6 +37,32 @@ services:
     volumes:
       # 挂载一个空的证书目录
       - docker-certs:/root/.docker:rw
+  
+
+  redis:
+    image: redis:7.4.7  # 推荐使用 alpine 版本，更轻量
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_PASSWORD: "!QAZ2wsx"  # Redis 的环境变量
+      # 可选：其他 Redis 配置
+      REDIS_PORT: 6379
+      REDIS_DATABASES: 16
+    command: >
+      redis-server
+      --requirepass "se2DxorFo32dRMzJ"
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]  # 正确的 Redis 健康检查
+      timeout: 5s
+      interval: 10s
+      retries: 5
+    volumes:
+      - ./redis_data:/data  # 持久化数据
+      #- ./redis/redis.conf:/usr/local/etc/redis/redis.conf  # 如果需要自定义配置
+    networks:
+      - app-network
+    restart: unless-stopped
 
   # Backend Service
   mysql:

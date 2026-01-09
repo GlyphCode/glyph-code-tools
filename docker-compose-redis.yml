@@ -1,0 +1,23 @@
+services:
+  redis:
+    image: redis:7.4.7  # 推荐使用 alpine 版本，更轻量
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_PASSWORD: "!QAZ2wsx"  # Redis 的环境变量
+      # 可选：其他 Redis 配置
+      REDIS_PORT: 6379
+      REDIS_DATABASES: 16
+    command: >
+      redis-server
+      --requirepass "se2DxorFo32dRMzJ"
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]  # 正确的 Redis 健康检查
+      timeout: 5s
+      interval: 10s
+      retries: 5
+    volumes:
+      - ./redis_data:/data  # 持久化数据
+      #- ./redis/redis.conf:/usr/local/etc/redis/redis.conf  # 如果需要自定义配置
+    restart: unless-stopped

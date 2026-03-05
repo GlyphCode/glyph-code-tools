@@ -1,5 +1,5 @@
 llm:
-  defaultllm: qwen3-max
+  defaultllm: 
   token: 
   url: 
 git:

@@ -39,10 +39,14 @@ export class CodingComponent implements OnInit {
   urerequest:any={}
   workflowId:string=""
   interval:any
+  workflowStatus:boolean =false
   scriptContent:string=""
   isVisible = false
   treeheight:any='710px'
   code:any={}
+  loadProjectInterval:any
+  dirmd5str:string=""
+  dirloadCnt:number=0
   // private eventSource: EventSource;
   editorOptions: any = {
     theme: 'vs-dark',
@@ -94,8 +98,12 @@ export class CodingComponent implements OnInit {
           
       }
    })
+   this.loadIntervalDir()
   }
-
+  loadIntervalDir(){
+    this.loadDirs()
+   // this.interval = setInterval(()=>this.loadDirs(),8000)
+  }
   loadActiveProject(){
      let user= this.tokenService.getUser()
      let project = {
@@ -103,7 +111,15 @@ export class CodingComponent implements OnInit {
     }
   
     this.pService.getActiveProject(project).subscribe(resp=>{
+        if(resp.data==null||resp.data.id==""){
+          return
+        }
         this.workflowId = resp.data.id
+        console.log("load workflow id is ",this.workflowId)
+        if (this.workflowId!=null){
+          clearInterval(this.loadProjectInterval)
+        }
+       
         this.loadDirs()
         console.log("CodingComponent get workflowid",this.workflowId)
       
@@ -112,18 +128,31 @@ export class CodingComponent implements OnInit {
 
   loadDirs(){
     let pinfo={"user_id":"1","project_id":this.workflowId}
+    if (this.workflowStatus==true){
+      return
+    }
+    if (this.workflowId==""){
+      this.loadActiveProject()
+    }
+     this.dirloadCnt++
     this.pService.loaddirs(pinfo).subscribe(resp=>{
       if (resp.code==200){
+        if (this.dirmd5str==resp.md5 && this.dirloadCnt==5){
+            clearInterval(this.interval)
+            this.dirloadCnt = 0
+            return
+        }
+        this.dirmd5str = resp.md5
         this.nodes = resp.data
       }
     })
   }
 
   sendHandler(){
-    if (this.workflowId==""){
-      this.msgService.error("请先创建项目")
-      return
-    }
+    // if (this.workflowId==""){
+    //   this.msgService.error("请先创建项目")
+    //   return
+    // }
     console.log("this.chatMsg is ==========",this.chatMsg.trim())
     if(this.chatMsg.trim()==""){
       this.msgService.info("请输入聊天内容");
@@ -176,10 +205,12 @@ export class CodingComponent implements OnInit {
 
     this.urerequest.message = msgInfo
     this.sendRequest(this.urerequest)
-    this.interval = setInterval(()=>this.loadDirs(),8000)
+    this.workflowStatus = false
+    
   }
 
   sendRequest(request:any){
+    this.loadActiveProject()
     this.chatService.chatStream(request,"/agent/api/workflow").subscribe(
     {
         next: (jsonObject) => {
@@ -194,6 +225,11 @@ export class CodingComponent implements OnInit {
              if(text==undefined || text=="undefined"){
               text=""
              }
+              if (jsonObject.flowId!=""&&jsonObject.flowId!=null){
+              this.workflowId = jsonObject.flowId
+              this.loadIntervalDir()
+            }
+
             msgData.content = text
             msgData.responseId = jsonObject.id
             msgData.role ="assistant"
@@ -202,7 +238,7 @@ export class CodingComponent implements OnInit {
             this.dataLing.push(msgData)
         
            }else{
-            console.log("========================",msgChat)
+            console.log("========================",jsonObject)
            
             if(text==undefined||  text=="undefined"){
               text=""
@@ -211,9 +247,9 @@ export class CodingComponent implements OnInit {
               msgChat.cmd = cmd
             }
             if (jsonObject.subMessage!=null){
-               msgChat.content = text
+                msgChat.content = text
                 msgChat.subMessage = jsonObject.subMessage
-                
+                this.loadIntervalDir()
             }else{
                 msgChat.content += text
             }
@@ -222,7 +258,7 @@ export class CodingComponent implements OnInit {
         complete: () => {
           this.loading = false
           console.log("---------------complete---------")
-          clearInterval(this.interval)
+          this.workflowStatus = true
         },
         error: (errMsg) => {
           this.loading = false;
@@ -232,11 +268,19 @@ export class CodingComponent implements OnInit {
   }
 
   createNewProjectHandler(){
+    this.nodes = []
     let id= Math.random()
     console.log("rand num",id)
-    this.projectService.createNewProjectHandler("new user test"+id).subscribe(resp=>{
+    if (this.workflowId==""){
+       this.msgService.success("当前没有运行项目")
+       return
+    }
+   
+    this.projectService.updateProjectHandler(this.workflowId).subscribe(resp=>{
       console.log("new project id is ",resp.data)
-      this.workflowId = resp.data
+      this.workflowId=""
+      this.msgService.success(resp.msg)
+       this.loadDirs()
     })
   }
 

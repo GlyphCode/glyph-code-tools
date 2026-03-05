@@ -12,10 +12,10 @@ if (environment.production) {
   console.debug = function() {};
   console.info = function() {};
 }else{
-  // console.log = function() {};  // 空函数
-  // console.warn = function() {};
-  // console.debug = function() {};
-  // console.info = function() {};
+  console.log = function() {};  // 空函数
+  console.warn = function() {};
+  console.debug = function() {};
+  console.info = function() {};
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule)

@@ -134,5 +134,7 @@ export class LoginComponent implements OnInit {
         }
     )
   }
-
+resetimageHandler(){
+  this. changeImageHandler()
+}
 }

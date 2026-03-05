@@ -20,4 +20,7 @@ export class WorkflowService {
         let mapData={"pname":name}
         return this.http.post("agent/api/workflow/create",mapData,{headers:{"token":"validate"}})
     }
+    updateProjectHandler(id:String):Observable<any>{
+        return this.http.get("agent/project/status/"+id,{headers:{"token":"validate"}})
+    }
 }

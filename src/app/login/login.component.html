@@ -14,7 +14,7 @@
 					<i class="login__icon fas fa-lock"></i>
 					<div nz-row>
 						<div nz-col><input type="text" formControlName="checkcode"  class="login__code"  placeholder="验证码"></div>
-						<div nz-col><img [src]="imgstr" width="90" height="50" /></div>
+						<div nz-col><img [src]="imgstr" width="90" (click)="resetimageHandler()" height="50" /></div>
 						<input type="hidden" formControlName="checkcodeid" />
 					</div>
 				</div>

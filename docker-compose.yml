@@ -21,7 +21,7 @@ services:
       #大模型api接口地址
       - LLMURL=
        #默认大模型
-      - LLMMODEL=
+      - LLMMODEL=qwen3-max
     extra_hosts:
       # 确保能解析到主机
       - "host.docker.internal:host-gateway"

@@ -19,9 +19,9 @@ services:
       #大模型token
       - LLMTOKEN=
       #大模型api接口地址
-      - LLMURL=
+      - LLMURL=http://123.56.109.163/v1
        #默认大模型
-      - LLMMODEL=qwen3-max
+      - LLMMODEL=gpt-5.5
     extra_hosts:
       # 确保能解析到主机
       - "host.docker.internal:host-gateway"

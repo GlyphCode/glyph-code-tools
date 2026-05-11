@@ -17,11 +17,11 @@ services:
       - DOCKER_TLS_CERTDIR=
       - DOCKER_MACHINE_NAME=
       #大模型token
-      - LLMTOKEN=
+      - LLMTOKEN=sk-X9HRCsD7QU84aidKBYN3jOmP7HWPSc7NSh0gH3Mwm1q3FJ7M
       #大模型api接口地址
-      - LLMURL=http://123.56.109.163/v1
+      - LLMURL=https://api.weelinking.com/v1
        #默认大模型
-      - LLMMODEL=gpt-5.5
+      - LLMMODEL=qwen3.5-plus
     extra_hosts:
       # 确保能解析到主机
       - "host.docker.internal:host-gateway"

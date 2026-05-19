@@ -11,35 +11,31 @@ import { TokenService } from './token.service';
 export class ChatServiceService {
   private stop$ = new Subject<void>();
   private controller: AbortController;
-  
-  constructor(private http: HttpClient,  private tokenService: TokenService) { }
-  
+
+  constructor(private http: HttpClient, private tokenService: TokenService) { }
+
   chatStream(model: any, url: string): Observable<any> {
     console.log("======222===============")
     console.log(model)
     console.log("======222===============")
-    
     return new Observable<string>(observer => {
       const token = this.tokenService.getToken();
       this.controller = new AbortController();
-      
       fetch(url, {
         method: 'POST',
         body: JSON.stringify(model),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': "Bearer "+token,
+          'Authorization': "Bearer " + token,
         },
         signal: this.controller.signal
       }).then(response => {
         const reader = response.body?.getReader();
         const decoder = new TextDecoder();
-        
         if (!reader) {
           observer.error("No response body");
           return;
         }
-        
         if (!response.ok) {
           reader.read().then(({ done, value }) => {
             try {
@@ -51,9 +47,7 @@ export class ChatServiceService {
           });
           return;
         }
-        
         console.log("=============2===============")
-        
         const push = () => {
           reader.read().then(({ done, value }) => {
             if (done) {
@@ -61,22 +55,23 @@ export class ChatServiceService {
               console.log(done)
               return;
             }
-            
             const replay = decoder.decode(value);
-
-            console.log("replay value is :",replay)
+            console.log("replay value is :", replay)
 
             const eventStr = replay.split('\n\n');
+            if (eventStr[0].includes("heartbeat")) {
+              console.log("---------------------------heartbeat------------------")
+              push()
+              return
+            }
 
-             console.log("eventStr value is :",eventStr)
-            
+            console.log("eventStr value is :", eventStr)
             if (eventStr[0] && eventStr[0].replace("data:", "").trim() == '[DONE]') {
               console.log("---------------------------done------------------[]")
               observer.complete();
-              reader.cancel(); 
+              reader.cancel();
               return;
             }
-            
             if (eventStr[0]) {
               try {
                 const jsonObject = JSON.parse(eventStr[0].replace("data:", "").trim());
@@ -92,12 +87,10 @@ export class ChatServiceService {
             observer.error(err.message);
           });
         };
-        
         push();
       }).catch((err: Error) => {
         observer.error("Error message:未知错误 - " + err.message);
       });
-      
       // 清理函数
       return () => {
         this.stop$.next();
